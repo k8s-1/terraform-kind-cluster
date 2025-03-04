@@ -31,7 +31,9 @@ provider "kubernetes" {
 }
 
 resource "kubernetes_manifest" "test" {
-  manifest = yamldecode(file("${path.module}/manifests/*"))
+  for_each = toset(local.yaml_files)
+
+  manifest = yamldecode(file("${path.module}/manifests/${each.value}"))
 }
 
 ## Create a Pod in the Kind cluster
