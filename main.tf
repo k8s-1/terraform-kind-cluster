@@ -30,6 +30,12 @@ provider "kubernetes" {
   cluster_ca_certificate = kind_cluster.default.cluster_ca_certificate
 }
 
+# Get the list of YAML files in the "manifests" directory
+locals {
+  yaml_files = fileset("./manifests", "*.yaml")
+}
+
+# Create a Kubernetes manifest resource for each file
 resource "kubernetes_manifest" "test" {
   for_each = toset(local.yaml_files)
 
