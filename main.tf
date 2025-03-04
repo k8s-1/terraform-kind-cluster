@@ -30,19 +30,23 @@ provider "kubernetes" {
   cluster_ca_certificate = kind_cluster.default.cluster_ca_certificate
 }
 
-# Create a Pod in the Kind cluster
-resource "kubernetes_pod" "example" {
-  metadata {
-    name = "example-pod"
-  }
-
-  spec {
-    container {
-      name  = "nginx"
-      image = "nginx:latest"
-      port {
-        container_port = 80
-      }
-    }
-  }
+resource "kubernetes_manifest" "test" {
+  manifest = yamldecode(file("${path.module}/manifests/*"))
 }
+
+## Create a Pod in the Kind cluster
+#resource "kubernetes_pod" "example" {
+#  metadata {
+#    name = "example-pod"
+#  }
+#
+#  spec {
+#    container {
+#      name  = "nginx"
+#      image = "nginx:latest"
+#      port {
+#        container_port = 80
+#      }
+#    }
+#  }
+#}
