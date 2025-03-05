@@ -6,3 +6,5 @@ tf init
 tf plan
 tf apply
 ```
+
+# Always separate cluster infra e.g. VM + network creation > cluster creation > cluster infra resources > other yaml (ideally use flux for this)
