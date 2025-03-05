@@ -25,7 +25,6 @@ provider "kubernetes" {
   cluster_ca_certificate = kind_cluster.default.cluster_ca_certificate
 }
 
-# Create a Pod in the Kind cluster
 resource "kubernetes_pod" "example" {
   metadata {
     name = "example-pod"
