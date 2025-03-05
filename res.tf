@@ -14,4 +14,3 @@ resource "kubernetes_manifest" "test" {
   EOT
   )
 }
-
