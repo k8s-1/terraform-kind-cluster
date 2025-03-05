@@ -17,11 +17,6 @@ resource "kind_cluster" "default" {
   node_image     = "kindest/node:v1.32.2"
 }
 
-# Output the kubeconfig (for later use)
-# output "kubeconfig" {
-#  value = kind_cluster.default.kubeconfig
-# }
-
 provider "kubernetes" {
   host = kind_cluster.default.endpoint
 
@@ -30,31 +25,19 @@ provider "kubernetes" {
   cluster_ca_certificate = kind_cluster.default.cluster_ca_certificate
 }
 
-# Get the list of YAML files in the "manifests" directory
-locals {
-  yaml_files = fileset("./manifests", "*.yaml")
+# Create a Pod in the Kind cluster
+resource "kubernetes_pod" "example" {
+  metadata {
+    name = "example-pod"
+  }
+
+  spec {
+    container {
+      name  = "nginx"
+      image = "nginx:latest"
+      port {
+        container_port = 80
+      }
+    }
+  }
 }
-
-# Create a Kubernetes manifest resource for each file
-resource "kubernetes_manifest" "test" {
-  for_each = toset(local.yaml_files)
-
-  manifest = yamldecode(file("${path.module}/manifests/${each.value}"))
-}
-
-## Create a Pod in the Kind cluster
-#resource "kubernetes_pod" "example" {
-#  metadata {
-#    name = "example-pod"
-#  }
-#
-#  spec {
-#    container {
-#      name  = "nginx"
-#      image = "nginx:latest"
-#      port {
-#        container_port = 80
-#      }
-#    }
-#  }
-#}
